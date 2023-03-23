@@ -25,7 +25,13 @@ const guidId = getId({ guid: crypto.randomUUID() });
 // never
 type ErrorCode<T> = T extends { errorCode: string } ? string : never;
 
-function getErrorCodeFrom<T>(o: T): ErrorCode<T> {}
+function getErrorCodeFrom<T extends {}>(o: T): ErrorCode<T> {
+  if ('errorCode' in o) {
+    return o['errorCode'] as ErrorCode<T>;
+  } else {
+    throw "errorCode not found";
+  }
+}
 
 const errorCode = getErrorCodeFrom({ errorCode: "E100" });
 const errorCode2 = getErrorCodeFrom({ id: 1 });

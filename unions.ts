@@ -1,29 +1,33 @@
-export interface Success<T> {
+interface Success<T> {
   _type: "ok";
   value: Readonly<T>;
 }
 
-export interface AuthError {
+interface AuthError {
   _type: "unauthorized";
 }
 
-export interface ApiError {
+interface ApiError {
   _type: "apiError";
   error: ErrorContract;
 }
 
-export interface OtherError {
+interface OtherError {
   _type: "other";
 }
 
-export interface ErrorContract {
+// interface OtherOtherError {
+//   _type: "other2";
+// }
+
+interface ErrorContract {
   code: string;
   message: string;
 }
 
-export type HttpError = AuthError | ApiError | OtherError;
+type HttpError = AuthError | ApiError | OtherError;
 
-export type HttpResponse<T> = Success<T> | HttpError;
+type HttpResponse<T> = Success<T> | HttpError;
 
 // ---------------
 
@@ -61,7 +65,7 @@ async function parseResponse<T>(response: Response): Promise<HttpResponse<T>> {
 const result = await makeRequest("get", "https://betterask.erni");
 
 // Solution: type narrowing
-export async function handleHttpResponse<T>(
+async function handleHttpResponse<T>(
   apiCall: Promise<HttpResponse<T>>,
   success: (val: T) => void,
   error: (err: HttpError) => void
@@ -80,3 +84,30 @@ handleHttpResponse(
   (value) => console.info(value),
   (e) => console.error(e)
 );
+
+// compile-time exhaustiveness checks with 'never'
+function getLogString<T>(response: HttpResponse<T>): string {
+  switch (response._type) {
+    case "ok":
+      return 'OK: ' + JSON.stringify(response.value);
+    case "unauthorized":
+      return "Unauthorized!";
+    case "apiError":
+      return `API Error: ${response.error}`;
+    case "other":
+      return `Other Error: ${JSON.stringify(response)}`;
+    default:
+      const _exhaustiveCheck: never = response;
+      return _exhaustiveCheck;
+      //return assertNever();
+  }
+}
+
+// inference is weird
+function assertNever() {
+  throw "This should never happen";
+}
+
+const assertNeverArrow = function () {
+  throw "This should also never happen";
+};

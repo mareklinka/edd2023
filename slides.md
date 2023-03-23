@@ -8,7 +8,16 @@ verticalSeparator: ^--$
 
 ## It's Types All the Way Down
 ### Exploring Advanced Typescript Concepts
-##### Marek Linka
+##### Marek Linka, ESK
+
+---
+
+### About Me
+
+* Joined ESK in March 2016
+* Focus on backend .NET (Core 2+)
+* .NET Core Contributor
+* Proponent of strong type systems
 
 ---
 
@@ -18,7 +27,7 @@ verticalSeparator: ^--$
 * Motivational examples
 * `keyof` & `typeof`
 * Indexed access types
-* Conditional types
+* Conditional types, `never`
 * Mapped types
 * Template literal types
 * Discriminated unions
@@ -117,6 +126,15 @@ verticalSeparator: ^--$
 --
 
 ### Example
+
+---
+
+### Never
+
+* A "bottom" type of a type hierarchy
+* Is equivalent to an empty set
+* Useful for modelling functions that never return (e.g. throw helpers, infinite cycles)
+* Useful for implementing compile-time exhaustiveness checks for unions
 
 --
 
